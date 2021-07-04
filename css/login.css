@@ -1,0 +1,89 @@
+@import "init.css";
+
+.full-height{
+    height: 100vh;
+}
+
+.image-section{
+    width: 100%;
+    height: 100%;
+}
+
+img{
+    width: 100%;
+    height: 100%;
+}
+
+.logo{
+    width: 386px;
+    height: 150px;
+}
+
+.bold-900-title{
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.bold-700-title{
+    font-weight: 700;
+}
+
+.input-container{
+    position:relative;
+    width: 466px;
+}
+
+.input-container input{
+    height:64px;
+    width: 100%;
+    padding-left: 60px;
+}
+
+.input-container img{
+    position: absolute;
+    bottom: 21px;
+    left: 21px;
+    width: 24px;
+    height: 24px;
+}
+
+.btn-login{
+    background: var(--darkorange);
+    color: white;
+    font-size: 18px;
+    width: 229px;
+    height: 51px;
+    border-radius: 30px;
+    border: none;
+    font-weight: 500;
+}
+
+.btn-login:focus{
+    outline: none;
+}
+
+.btn-login:hover{
+    box-shadow: 3px 4px 4px #f36f2267;
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.forgot-text,
+.register-text{
+    font-size: 15px;
+}
+
+.forgot-text a{
+    color: var(--darkblue);
+    font-weight: 700;
+}
+
+.register-text a{
+    color: var(--darkgreen);
+    font-weight: 700;
+}
+
+.register-text a:hover{
+    color: var(--darkgreen);
+    font-weight: 700;
+}
