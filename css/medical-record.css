@@ -207,9 +207,10 @@ table {
     border: 1px solid #000;
 }
 
-thead tr th{
+thead tr th {
     font-weight: 600;
 }
+
 tbody tr:first-child {
     box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.24) inset;
 }
@@ -254,7 +255,7 @@ tbody tr:hover {
     color: white;
 }
 
-.btn-done {
+.btn-delete-done, .btn-edit-done, #btn-add-done {
     height: 44px;
     width: 119px;
     color: white;
@@ -265,7 +266,7 @@ tbody tr:hover {
     font-size: 16px;
 }
 
-.btn-done:hover {
+.btn-delete-done:hover, .btn-edit-done:hover, #btn-add-done:hover {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     transition: all 0.3s;
     cursor: pointer;
@@ -288,7 +289,7 @@ tbody tr:hover {
     cursor: pointer;
 }
 
-.input-custom input {
+.input-custom input, .input-custom select {
     width: 100%;
     height: 45px;
     padding: 0 20px;
@@ -299,5 +300,21 @@ tbody tr:hover {
     vertical-align: middle;
     height: 44px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 15px;
+}
+
+#pagination li {
+    margin-left: 10px;
+    cursor: pointer;
+    border: 1px solid black;
+    padding: 5px 12px;
+}
+
+#pagination li:hover {
+    font-weight: 700;
+}
+
+.pagination-active {
+    font-weight: 700;
+    color: var(--darkblue);
 }
