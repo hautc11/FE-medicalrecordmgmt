@@ -113,22 +113,24 @@ button:focus {
     top: 38px;
 }
 
-.dropdown-content a {
+.dropdown-content p {
     color: black;
     padding: 0px 16px;
     text-decoration: none !important;
     display: block;
     font-size: 15px;
+    margin: 0;
 }
 
 .row {
     margin: 0 !important;
 }
 
-.dropdown a:hover {
+.dropdown p:hover {
     background-color: #7386D5;
     color: white;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .show {
@@ -317,4 +319,14 @@ tbody tr:hover {
 .pagination-active {
     font-weight: 700;
     color: var(--darkblue);
+}
+
+[data-notify="progressbar"] {
+	margin-bottom: 0px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	height: 2px;
+    background-color: inherit;
 }

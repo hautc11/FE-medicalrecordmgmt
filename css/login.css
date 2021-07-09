@@ -87,3 +87,12 @@ img{
     color: var(--darkgreen);
     font-weight: 700;
 }
+
+.err{
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    color: red;
+    font-size: 15px;
+    font-weight: 600;
+    font-style: italic;
+}

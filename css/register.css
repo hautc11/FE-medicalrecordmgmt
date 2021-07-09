@@ -79,3 +79,12 @@ img{
     color: var(--darkorange);
     font-weight: 700;
 }
+
+.err{
+    margin-left: 0.5rem;
+    margin-top: 0.3rem;
+    color: red;
+    font-size: 11px;
+    font-weight: 600;
+    font-style: italic;
+}

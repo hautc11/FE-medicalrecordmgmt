@@ -22,7 +22,28 @@ $(document).ready(function () {
         $('#hidden-text').toggle();
         $('#title').toggleClass('mb-3');
     });
+    $.notify({
+        message: "<strong>Đăng nhập thành công!<strong>",
+    }, {
+        type: "success",
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        delay: 1000,
+        animate: {
+            enter: 'animate__animated animate__fadeInDown',
+            exit: 'animate__animated animate__fadeOutUp'
+        },
+    });
 });
+
+$('#logout-btn').click(function () {
+    console.log(sessionStorage.getItem('accessToken'))
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.clear()
+    $(location).attr('href',"login.html")
+})
 
 function dropdownLogout() {
     document.getElementById("myDropdown").classList.toggle("show");
