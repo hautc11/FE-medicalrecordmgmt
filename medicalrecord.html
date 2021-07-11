@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="icon" href="assets/icons/fpt-ic.jpg" type="image/icon type">
     <title>Home</title>
 </head>
@@ -58,8 +58,8 @@
 
                         <span>QUẢN LÝ HỒ SƠ BỆNH ÁN</span>
                     </div>
-                    <div class="dropdown">
-                        <button onclick="dropdownLogout()" class="btn-menu dropbtn">
+                    <div class="dropdown" id="dropdownLogout">
+                        <button class="btn-menu dropbtn">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <div id="myDropdown" class="dropdown-content">
@@ -74,26 +74,35 @@
             </div>
 
             <div class="row">
-                <div class="col-9 pl-5">
+                <div class="col-6 pl-5">
                     <div class="input-container">
-                        <input type="text" id="usernameInput" value>
+                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân">
                         <img src="assets/icons/search-ic.png" alt="">
                     </div>
                 </div>
 
-                <div class="col-1 pl-0">
-                    <button type="button" class="btn-new" data-toggle="modal" data-target="#addModal">Mới<i
+                <div class="col-2 pl-0">
+                    <button type="button" class="btn-search">Tìm kiếm <i
+                            class="fas fa-search ml-2"></i></button>
+                </div>
+                <div class="col-4 pl-0 d-flex justify-content-between pr-5">
+                    <button type="button" class="btn-new px-0" data-toggle="modal" data-target="#addModal">Mới<i
                             class="fas fa-plus-circle ml-2"></i></button>
+                    <button type="button" class="btn-update px-0 ml-3">Cập nhật<i
+                            class="fas fa-retweet ml-2"></i></button>
+                    <button type="button" class="btn-export px-0 ml-3">In<i
+                            class="fas fa-file-export ml-2"></i></button>
+                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i
+                            class="fas fa-trash ml-2"></i></button>
                 </div>
-                <div class="col-2  pl-0">
-                    <button type="button" class="btn-update">Cập nhật<i class="fas fa-sync ml-2"></i></button>
-                </div>
+
             </div>
 
-            <div class="row" style="padding: 20px 50px;">
+            <div class="row" style="padding: 20px 50px 10px 50px;">
                 <table id="table-medical-record">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Mã HS</th>
                             <th>Họ và Tên</th>
                             <th>Ngày Sinh</th>
@@ -105,7 +114,7 @@
                             <th>Khác</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableBody">
                     </tbody>
                 </table>
             </div>
@@ -179,7 +188,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-edit-done">Xong<i class="fas fa-check ml-2"></i></button>
@@ -202,7 +210,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-body__idUser">Bạn muốn xóa hồ sơ có Mã Số HS: HS01?</p>
+                    <p class="modal-body-delete"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-delete-done">Đồng ý<i class="fas fa-check ml-2"></i></button>
@@ -225,6 +233,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <small class="err" id="emptyAddForm"></small>
                     <form class="add-medical-record-form">
                         <div class="row mb-3">
                             <div class="col-5 label-input">Họ và Tên</div>
@@ -282,9 +291,8 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>

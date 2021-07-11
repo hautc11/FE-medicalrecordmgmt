@@ -4,7 +4,7 @@ function sendLoginRequest(urlToSend, email, password) {
     $.ajax({
         type: "POST",
         url: urlToSend,
-        dataType: 'JSON',
+        dataType: 'json',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             email: email,

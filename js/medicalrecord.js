@@ -1,69 +1,121 @@
-const addMedicalRecordForm = document.querySelector('.add-medical-record-form');
-const fullNameInputAdd = document.getElementById('fullNameInputAdd');
-const dobInputAdd = document.getElementById('dobInputAdd');
-const addressInputAdd = document.getElementById('addressInputAdd');
-const phoneInputAdd = document.getElementById('phoneInputAdd');
-const sexInputAdd = document.getElementById('sexInputAdd');
-/*---------------------------*/
-const idInputEdit = document.getElementById('idInputEdit');
-const fullNameInputEdit = document.getElementById('fullNameInputEdit');
-const dobInputEdit = document.getElementById('dobInputEdit');
-const addressInputEdit = document.getElementById('addressInputEdit');
-const phoneInputEdit = document.getElementById('phoneInputEdit');
-const sexInputEdit = document.getElementById('sexInputEdit');
-/** ----------x ------------ */
+const uri = "http://localhost:8080/medicalrecords";
 const accessToken = sessionStorage.getItem('accessToken');
-const tableBody = document.querySelector("#table-medical-record > tbody");
-const pagination = document.getElementById('pagination');
+const searchInput = $("#searchInput")
+// edit input
+const idInputEdit = $('#idInputEdit');
+const fullNameInputEdit = $('#fullNameInputEdit');
+const dobInputEdit = $('#dobInputEdit');
+const addressInputEdit = $('#addressInputEdit');
+const phoneInputEdit = $('#phoneInputEdit');
+const sexInputEdit = $('#sexInputEdit');
 
-$(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-        $('#hidden-text').toggle();
-        $('#title').toggleClass('mb-3');
-    });
-    $.notify({
-        message: "<strong>Đăng nhập thành công!<strong>",
-    }, {
-        type: "success",
-        placement: {
-            from: "top",
-            align: "right"
-        },
-        delay: 1000,
-        animate: {
-            enter: 'animate__animated animate__fadeInDown',
-            exit: 'animate__animated animate__fadeOutUp'
-        },
-    });
+// add input
+const fullNameInputAdd = $('#fullNameInputAdd');
+const dobInputAdd = $('#dobInputAdd');
+const addressInputAdd = $('#addressInputAdd');
+const phoneInputAdd = $('#phoneInputAdd');
+const sexInputAdd = $('#sexInputAdd');
+
+//side bar
+$('#sidebarCollapse').on('click', function () {
+    $('#sidebar').toggleClass('active', 2000, "easeOutSine");
+    $('#hidden-text').toggle(500);
+    $('#title').toggleClass('mb-3');
 });
-
+//dropdown logout
+$('#dropdownLogout').click(function () {
+    $('#myDropdown').slideToggle("slow");
+})
+//close dropdown khi click outside
+$(document).on("click", function (event) {
+    var $trigger = $("#dropdownLogout");
+    if ($trigger !== event.target && !$trigger.has(event.target).length) {
+        $(".dropdown-content").slideUp("slow");
+    }
+});
+//logout event
 $('#logout-btn').click(function () {
     console.log(sessionStorage.getItem('accessToken'))
     sessionStorage.removeItem('accessToken')
     sessionStorage.clear()
-    $(location).attr('href',"login.html")
+    $(location).attr('href', "index.html")
+})
+//
+$("#btn-add-done").click(function (e) {
+    e.preventDefault();
+    if (fullNameInputAdd.val() == "" || dobInputAdd.val() == ""
+        || addressInputAdd.val()==""||phoneInputAdd.val()==""||sexInputAdd.val()=="") {
+            $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin bệnh nhân")
+    } else {
+        $("#emptyAddForm").text("")
+        $.ajax({
+            type: "POST",
+            url: uri,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+            }, data: JSON.stringify({
+                fullName: fullNameInputAdd.val(),
+                dob: dobInputAdd.val(),
+                address: addressInputAdd.val(),
+                phoneNumber: phoneInputAdd.val(),
+                sex: sexInputAdd.val(),
+            })
+            , success: function () {
+                console.log("Thêm thành công")
+            }, error: function (xhr) {
+                if (xhr.status == 400) {
+                    $('#addModal').modal('hide')
+                    notifyPush("Thêm thất bại!", "danger")
+                } else if (xhr.status == 200) {
+                    $('#addModal').modal('hide')
+                    notifyPush("Thêm thành công!", "success")
+                }
+            }
+        })
+    }
 })
 
-function dropdownLogout() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
+$(".btn-update").click(function () {
+    $("#tableBody tr").remove()
+    sendGetDoctorRequest(uri);
+})
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function (event) {
-    if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
+$(".btn-search").click(function () {
+    if (searchInput.val() != "") {
+        search(searchInput.val());
     }
+})
+function search(params) {
+    $("#tableBody tr").remove()
+    $.ajax({
+        type: "GET",
+        url: uri + `?name=${params}`,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+        }, success: function (result) {
+            renderTable(result)
+            $('#pagination li').remove()
+            for (let index = 1; index <= result.totalPages; index++) {
+                if (index == 1) {
+                    $('#pagination').append(`<li class="pagination-active pagination-page" data=${index}>${index}</li>`)
+                } else {
+                    $('#pagination').append(`<li class="pagination-page" data=${index}>${index}</li>`)
+                }
+            }
+            $('.pagination-page').click(function () {
+                $('.pagination-page').removeClass('pagination-active')
+                var page = $(this).attr('data');
+                setPaginationEvent(uri, page)
+            })
+        }, error: function (result) {
+            console.log("Fail: " + result)
+        }
+    })
 }
-
-//cvt timestamp to custom date
 function cvtTimestamp2Date(timestamp) {
     let date = new Date(timestamp);
     let year = date.getUTCFullYear();
@@ -78,203 +130,224 @@ function cvtTimestamp2Date(timestamp) {
     let result = year + "-" + month + "-" + dt;
     return result;
 }
-
-const renderMedicalRecords = async (records) => {
-    records?.items?.forEach((row) => {
-        var createAt = cvtTimestamp2Date(row.createAt);
-        var expirationDate = cvtTimestamp2Date(row.expirationDate);
-        var sex = '';
-        if (row.sex == 1) {
-            sex = "Nam";
-        } else {
-            sex = "Nữ"
-        }
-        tableBody.insertAdjacentHTML(`beforeend`, `
-                    <tr>
-                    <td>${row.id}</td>
-                    <td>${row.fullName}</td>
-                    <td>${row.dob}</td>
-                    <td>${sex}</td>
-                    <td>${row.address}</td>
-                    <td>${row.phoneNumber}</td>
-                    <td>${createAt}</td>
-                    <td>${expirationDate}</td>
-                    <td>
-                        <span class='sua-btn' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
-                        <span class='xoa-btn' data='${row.id}' > <i class="fas fa-trash ml-2" data-toggle="modal" data-target="#deleteModal" ></i><span>
-                    </td>
-                </tr>
-               `);
-    });
-
-    const deleteBtn = document.querySelectorAll('.xoa-btn')
-    const editBtn = document.querySelectorAll('.sua-btn')
-    const idUser = document.querySelector('.modal-body__idUser')
-
-    deleteBtn.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const id = btn.getAttribute('data')
-            const btnDeleteDone = document.querySelector('.btn-delete-done');
-            idUser.innerHTML = `Bạn muốn xóa hồ sơ có Mã Số HS: HS ${id}?`
-            deleteRecord(+id, btnDeleteDone)
-            console.log(btnDeleteDone);
-        })
-    })
-
-    editBtn.forEach(btn => {
-        // console.log(btn)
-        btn.addEventListener('click', function () {
-            const id = btn.getAttribute('data')
-            const btnEditDone = document.querySelector('.btn-edit-done');
-            editRecord(id, btnEditDone)
-        })
-    })
-}
-
-function setPagination(paginationPages) {
-    paginationPages?.forEach((page) => {
-        page.addEventListener('click', (e) => {
-            e.preventDefault();
-            paginationPages.forEach(items => items.classList.remove("pagination-active"))
-            page.classList.add("pagination-active")
-            fetch(`http://localhost:8080/medicalrecords?page=${page.innerText - 1}`, {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + accessToken
+function sendGetDoctorRequest(urlToSend) {
+    $.ajax({
+        type: "GET",
+        url: urlToSend,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+        }, success: function (result) {
+            renderTable(result)
+            $('#pagination li').remove()
+            for (let index = 1; index <= result.totalPages; index++) {
+                if (index == 1) {
+                    $('#pagination').append(`<li class="pagination-active pagination-page" data=${index}>${index}</li>`)
+                } else {
+                    $('#pagination').append(`<li class="pagination-page" data=${index}>${index}</li>`)
                 }
+            }
+            $('.pagination-page').click(function () {
+                $('.pagination-page').removeClass('pagination-active')
+                var page = $(this).attr('data');
+                setPaginationEvent(uri, page)
             })
-                .then(response => response.json())
-                .then(data => {
-                    //xoa record sau khi pagination
-                    while (tableBody.hasChildNodes()) {
-                        tableBody.removeChild(tableBody.childNodes[0])
-                    }
-                    renderMedicalRecords(data)
-                })
-        })
+        }, error: function (result) {
+            console.log("Fail: " + result)
+        }
     })
 }
 
+function sendEditRequest(urlToSend) {
+    $.ajax({
+        type: "PUT",
+        url: urlToSend,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            id: idInputEdit.val(),
+            fullName: fullNameInputEdit.val(),
+            dob: dobInputEdit.val(),
+            sex: sexInputEdit.val(),
+            address: addressInputEdit.val(),
+            phoneNumber: phoneInputEdit.val()
+        }), beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+        }, success: function (result) {
+            console.log("success! " + result)
+        }, error: function (xhr) {
+            if (xhr.status == 400) {
+                $('#editModal').modal('hide')
+                notifyPush("Sửa thông tin thất bại!", "danger")
+            } else if (xhr.status == 200) {
+                $('#editModal').modal('hide')
+                notifyPush("Chỉnh sửa thành công!", "success")
+            }
+        }
+    })
+}
 
-const getMedicalRecords = async () => {
-    const data = await fetch('http://localhost:8080/medicalrecords', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
+function getDataByID(urlToSend, id) {
+    $.ajax({
+        type: "GET",
+        url: urlToSend + `/${id}`,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+        }, success: function (result) {
+            idInputEdit.val(result.id)
+            fullNameInputEdit.val(result.fullName)
+            dobInputEdit.val(result.dob)
+            sexInputEdit.val(result.sex)
+            addressInputEdit.val(result.address)
+            phoneInputEdit.val(result.phoneNumber)
+            $('.btn-edit-done').click(function () {
+                console.log("Ấn done")
+                sendEditRequest(uri);
+            })
+        }, error: function (result) {
+            console.log(result)
+        }
+    })
+}
+function setPaginationEvent(urlToSend, page) {
+    let activePage = $(`li[data|=${page}]`);
+    activePage.addClass("pagination-active")
+    $.ajax({
+        type: "GET",
+        url: urlToSend + `?page=${page - 1}`,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+        }, success: function (result) {
+            console.log("OK")
+            $("#tableBody tr").remove()
+            renderTable(result)
+        }, error: function (result) {
+            console.log(result)
+        }
+    })
+}
+function renderTable(data) {
+    (data.items).forEach(row => {
+        let sex = row.sex == 1 ? "Nam" : "Nữ";
+        let createAt = cvtTimestamp2Date(row.createAt)
+        let expirationDate = cvtTimestamp2Date(row.expirationDate)
+        $("#tableBody").append(
+            `<tr>
+                <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
+                <td>${row.id}</td>
+                <td>${row.fullName}</td>
+                <td>${row.dob}</td>
+                <td>${sex}</td>
+                <td>${row.address}</td>
+                <td>${row.phoneNumber}</td>
+                <td>${createAt}</td>
+                <td>${expirationDate}</td>
+                <td>
+                    <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
+                    <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-2" data-toggle="modal" data-target="#deleteModal" ></i><span>
+                </td>
+            </tr>`
+        )
+    });
+    $(".edit-row").click(function () {
+        var id = $(this).attr('data');
+        getDataByID(uri, id);
+    })
+    $(".delete-row").click(function () {
+        var id = $(this).attr('data');
+        $('.modal-body-delete').text(`Bạn muốn xóa hồ sơ có Mã Số HS: ${id}?`)
+        deleteById(uri, id);
+    })
+    var $submit = $(".btn-delete-all").hide(),
+        $cbs = $('input[name="selectBox"]').click(function () {
+            $submit.toggle($cbs.is(":checked"));
+        });
+}
+$(".btn-delete-all").click(function () {
+    var arr = $('input[name="selectBox"]');
+    var listItemsDelete = []
+    for (const item of arr) {
+        if (item.checked) {
+            listItemsDelete.push($(item).val())
         }
     }
-    ).then(response => response.json())
-        .then(data => {
-            for (let index = 1; index <= data.totalPages; index++) {
-                if (index == 1) {
-                    pagination.insertAdjacentHTML(`beforeend`,
-                        `
-                    <li class="pagination-active" id="pagination-page">${index}</li>
-                `)
-                } else {
-                    pagination.insertAdjacentHTML(`beforeend`,
-                        `
-                    <li id="pagination-page">${index}</li>
-                `)
+    deleteByListId(listItemsDelete);
+
+})
+function deleteByListId(list) {
+    list.forEach(id => {
+        $.ajax({
+            type: "DELETE",
+            url: uri + `/${id}`,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+            }, success: function () {
+                console.log("Xóa thành công")
+            }, error: function (xhr) {
+                if (xhr.status == 400) {
+                    $('#deleteModal').modal('hide')
+                    notifyPush("Xóa thất bại!", "danger")
+                } else if (xhr.status == 200) {
+                    $('#deleteModal').modal('hide')
+                    notifyPush("Xóa thành công!", "success")
                 }
             }
-            renderMedicalRecords(data)
-        });
-    const paginationPages = document.querySelectorAll('#pagination-page');
-    setPagination(paginationPages);
-
+        })
+    })
 }
-function deleteRecord(id, btnDeleteDone) {
-    // console.log(btnDeleteDone);
-    const idUser = id
-    btnDeleteDone.addEventListener('click', () => {
-        fetch(`http://localhost:8080/medicalrecords/${idUser}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            }
-        }).then(response => {
-            if (response.ok) {
-                $('#deleteModal').modal('hide')
+function deleteById(urlToSend, id) {
+    $('.btn-delete-done').click(function () {
+        $.ajax({
+            type: "DELETE",
+            url: urlToSend + `/${id}`,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+            }, success: function () {
                 console.log("Xóa thành công")
-            } else {
-                console.log("Thất bại")
-            }
-        })
-    })
-}
-const editRecord = async (id, btnEditDone) => {
-    const dataUser = await fetch(`http://localhost:8080/medicalrecords/${+id}`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
-        }
-    })
-        .then(response => response.json())
-        .then(data => data)
-    idInputEdit.value = dataUser.id
-    fullNameInputEdit.value = dataUser.fullName
-    dobInputEdit.value = dataUser.dob
-    addressInputEdit.value = dataUser.address
-    phoneInputEdit.value = dataUser.phoneNumber
-    sexInputEdit.value = dataUser.sex
-
-    btnEditDone.addEventListener('click', () => {
-        fetch(`http://localhost:8080/medicalrecords`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            },
-            body: JSON.stringify({
-                id: dataUser.id,
-                fullName: fullNameInputEdit.value,
-                dob: dobInputEdit.value,
-                address: addressInputEdit.value,
-                phoneNumber: phoneInputEdit.value,
-                sex: sexInputEdit.value
-            })
-        }).then(response => {
-            if (response.ok) {
-                $('#editModal').modal('hide')
-                console.log("Edit thành công")
-                // con live share ne
-            } else {
-                console.log("Thất bại")
+            }, error: function (xhr) {
+                if (xhr.status == 400) {
+                    $('#deleteModal').modal('hide')
+                    notifyPush("Xóa thất bại!", "danger")
+                } else if (xhr.status == 200) {
+                    $('#deleteModal').modal('hide')
+                    notifyPush("Xóa thành công!", "success")
+                }
             }
         })
     })
 }
 
-addMedicalRecordForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    var accessToken = sessionStorage.getItem('accessToken');
-    fetch('http://localhost:8080/medicalrecords', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
+function notifyPush(message, type) {
+    $.notify({
+        message: `<strong>${message}<strong>`,
+    }, {
+        type: `${type}`,
+        placement: {
+            from: "top",
+            align: "right"
         },
-        body: JSON.stringify({
-            fullName: fullNameInputAdd.value,
-            dob: dobInputAdd.value,
-            address: addressInputAdd.value,
-            phoneNumber: phoneInputAdd.value,
-            sex: sexInputAdd.value
-        })
-    }).then(response => {
-        if (response.ok) {
-            $('#addModal').modal('hide')
-
-        } else {
-            console.log("Thất bại")
-        }
-    })
+        delay: 1000,
+        animate: {
+            enter: 'animate__animated animate__fadeInDown',
+            exit: 'animate__animated animate__fadeOutUp'
+        },
+    });
+}
+$(document).ready(function () {
+    if (accessToken!=null) {
+        notifyPush("Đã đăng nhập!", "success");
+        sendGetDoctorRequest(uri, accessToken);
+    } else {
+        $(location).attr('href', "123213213.html")
+    }
+   
 })
-
-getMedicalRecords();
-// setPagination();
