@@ -1,0 +1,29 @@
+@import "init.css";
+body{
+    margin: 0;
+}
+.section{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.section img{
+    width: 500px;
+    height: 500px;
+}
+.text{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.back a{
+    color: var(--darkorange);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid var(--darkorange);;
+    padding: 2px 0px;
+}

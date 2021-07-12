@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bill.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="icon" href="assets/icons/fpt-ic.jpg" type="image/icon type">
+    <title>Hóa đơn viện phí</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/logo.png" alt="">
+            </div>
+
+            <div class="sidebar-content">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="medicalrecord.html">Hồ sơ bệnh án</a>
+                    </li>
+                    <li>
+                        <a href="testingform.html">Phiếu xét nghiệm</a>
+                    </li>
+                    <li>
+                        <a href="">Phiếu nhập xuất viện</a>
+                    </li>
+                    <li>
+                        <a href="">Phiếu khám</a>
+                    </li>
+                    <li class="active">
+                        <a href="">Viện phí</a>
+                    </li>
+                    <li>
+                        <a href="">Toa thuốc</a>
+                    </li>
+                    <li>
+                        <a href="doctor.html">Bác sĩ</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="content">
+            <div class="row">
+                <div class="container-fluid navigation-bar">
+                    <div class="left-section">
+                        <button class="btn-menu" id="sidebarCollapse">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <span>QUẢN LÝ HỒ SƠ BỆNH ÁN</span>
+                    </div>
+                    <div class="dropdown" id="dropdownLogout">
+                        <button class="btn-menu dropbtn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <p id="logout-btn">Đăng xuất<i class="fas fa-sign-out-alt ml-2"></i></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" id="title">
+                <p id="hidden-text"><span>HÓA ĐƠN VIỆN PHÍ</span></p>
+            </div>
+
+            <div class="row">
+                <div class="col-6 pl-5">
+                    <div class="input-container">
+                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân">
+                        <img src="assets/icons/search-ic.png" alt="">
+                    </div>
+                </div>
+
+                <div class="col-2 pl-0">
+                    <button type="button" class="btn-search">Tìm kiếm <i
+                            class="fas fa-search ml-2"></i></button>
+                </div>
+                <div class="col-4 pl-0 d-flex justify-content-between pr-5">
+                    <button type="button" class="btn-new px-0" data-toggle="modal" data-target="#addModal">Mới<i
+                            class="fas fa-plus-circle ml-2"></i></button>
+                    <button type="button" class="btn-update px-0 ml-3">Cập nhật<i
+                            class="fas fa-retweet ml-2"></i></button>
+                    <button type="button" class="btn-export px-0 ml-3">In<i
+                            class="fas fa-file-export ml-2"></i></button>
+                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i
+                            class="fas fa-trash ml-2"></i></button>
+                </div>
+
+            </div>
+
+            <div class="row" style="padding: 20px 50px 10px 50px;">
+                <table id="table-medical-record">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mã Hóa Đơn</th>
+                            <th>Ngày Lập</th>
+                            <th>Mã HS</th>
+                            <th>Họ và Tên</th>
+                            <th>Tổng cộng</th>
+                            <th>Khác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <ul id='pagination' class="d-flex  mx-auto list-unstyled">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">CHỈNH SỬA THÔNG TIN</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-5 label-input">Mã Hóa Đơn</div>
+                        <div class="col-7">
+                            <div class="input-custom">
+                                <input type="text" id="idInputEdit" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 label-input">Mã Hồ Sơ</div>
+                        <div class="col-7">
+                            <div class="input-custom">
+                                <input type="number" id="recordIdInputEdit">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 label-input">Tổng cộng</div>
+                        <div class="col-7">
+                            <div class="input-custom">
+                                <input type="number" id="totalInputEdit">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-edit-done">Xong<i class="fas fa-check ml-2"></i></button>
+                    <button type="button" class="btn-cancel" data-dismiss="modal">Hủy <i
+                            class="fas fa-times-circle"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal delete -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">XÓA HỒ SƠ BỆNH ÁN</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-body-delete"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-delete-done">Đồng ý<i class="fas fa-check ml-2"></i></button>
+                    <button type="button" class="btn-cancel" data-dismiss="modal">Hủy <i
+                            class="fas fa-times-circle"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal add -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI HÓA ĐƠN VIỆN PHÍ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <small class="err" id="emptyAddForm"></small>
+                    <form class="add-medical-record-form">
+                        <div class="row mb-3">
+                            <div class="col-5 label-input">Mã Hồ Sơ</div>
+                            <div class="col-7">
+                                <div class="input-custom">
+                                    <input type="text" id="recordIdInputAdd" required value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5 label-input">Tổng cộng</div>
+                            <div class="col-7">
+                                <div class="input-custom">
+                                    <input type="number" id="totalInputAdd" required value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 pull-right">
+                            <button id="btn-add-done" type="submit" class="btn-done mr-3">Đồng ý<i
+                                    class="fas fa-check ml-2"></i></button>
+                            <button type="button" class="btn-cancel" data-dismiss="modal">Hủy <i
+                                    class="fas fa-times-circle"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-a11y="true"></script>
+    <script src="js/bill.js"></script>
+    <script src="plugin/bootstrap-notify-master/bootstrap-notify.js"></script>
+</body>
+
+</html>

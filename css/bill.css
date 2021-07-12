@@ -1,0 +1,392 @@
+@import "init.css";
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    box-shadow: 1px -2px 19px -1px rgba(0, 0, 0, 0.29);
+}
+
+.sidebar-header {
+    width: 250px;
+    height: 93px;
+}
+
+.sidebar-header img {
+    width: 100%;
+    height: 100%;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+    transition: all 1s;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 17px;
+    display: block;
+    text-decoration: none;
+    margin-bottom: 20px;
+    color: black;
+}
+
+#sidebar ul li.active {
+    font-weight: 700;
+}
+
+#sidebar ul li a:first-child {
+    margin-top: 20px;
+}
+
+#sidebar ul li a::before {
+    content: "";
+    display: inline-block;
+    border-left: 3px solid var(--darkblue);
+    height: 20px;
+    margin: 0px 23px;
+    transform: translateY(9%);
+}
+
+#sidebar ul li a:hover {
+    color: white;
+    background: #7386D5;
+}
+
+#content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.navigation-bar {
+    height: 50px;
+    background-color: var(--darkblue);
+    color: white;
+    line-height: 50px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-bar span {
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.btn-menu {
+    background-color: inherit;
+    border: none;
+    color: white;
+    height: 50px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+.show {
+    display: block;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 130px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    left: -118px;
+    top: 38px;
+}
+
+.dropdown-content p {
+    color: black;
+    padding: 0px 16px;
+    text-decoration: none !important;
+    display: block;
+    font-size: 15px;
+    margin: 0;
+}
+
+.row {
+    margin: 0 !important;
+}
+
+.dropdown p:hover {
+    background-color: #7386D5;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.show {
+    display: block;
+}
+
+#hidden-text {
+    display: none;
+    margin-top: 15px;
+    margin-left: 28px;
+    border-left: 3px solid var(--darkblue);
+}
+
+#myDropdown {
+    display: none;
+}
+
+#hidden-text span {
+    margin-left: 10px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-container input {
+    height: 44px;
+    width: 100%;
+    padding-left: 60px;
+    border-radius: 30px;
+}
+
+.input-container img {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    width: 24px;
+    height: 24px;
+}
+
+.btn-new {
+    height: 44px;
+    width: 100%;
+    color: white;
+    background-color: var(--darkgreen);
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.btn-delete-all {
+    height: 44px;
+    width: 100%;
+    color: white;
+    background-color: rgb(233, 67, 67);
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+}
+.modal-header p{
+    font-size: 11px;
+    display: block;
+}
+.err{
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    color: red;
+    font-weight: 600;
+    font-style: italic;
+}
+.btn-new:hover, .btn-delete-all:hover {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn-search {
+    height: 44px;
+    width: 100%;
+    color: white;
+    background-color: var(--darkblue);
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* //#7386D5; */
+
+.btn-search:hover, .btn-update:hover, .btn-export:hover {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn-update {
+    width: 100%;
+    height: 44px;
+    border-radius: 25px;
+    color: white;
+    background-color: var(--darkorange);
+    border: none;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.btn-export {
+    width: 80%;
+    height: 44px;
+    border-radius: 25px;
+    color: white;
+    background-color: #7386D5;
+    ;
+    border: none;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #000;
+    transition: all 0.3s;
+}
+
+thead tr th {
+    font-weight: 600;
+}
+
+tbody tr:first-child {
+    box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.24) inset;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+    font-weight: 500;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(12, 77, 161, 0.438)
+}
+
+tbody tr:hover {
+    cursor: pointer;
+    color: white;
+    background-color: var(--darkblue);
+}
+
+.btn-edit {
+    background-color: inherit;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.btn-edit:hover {
+    color: white;
+}
+
+.btn-delete {
+    background-color: inherit;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.btn-delete:hover {
+    color: white;
+}
+
+.btn-delete-done, .btn-edit-done, #btn-add-done {
+    height: 44px;
+    width: 119px;
+    color: white;
+    background-color: var(--darkgreen);
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.btn-delete-done:hover, .btn-edit-done:hover, #btn-add-done:hover {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    height: 44px;
+    width: 119px;
+    color: white;
+    background-color: var(--darkorange);
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.btn-cancel:hover {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.input-custom input, .input-custom select {
+    width: 100%;
+    height: 45px;
+    padding: 0 20px;
+}
+
+.label-input {
+    line-height: 44px;
+    vertical-align: middle;
+    height: 44px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+#pagination li {
+    margin-left: 10px;
+    cursor: pointer;
+    border: 1px solid black;
+    padding: 5px 12px;
+}
+
+#pagination li:hover {
+    font-weight: 700;
+}
+
+.pagination-active {
+    font-weight: 700;
+    color: var(--darkblue);
+    pointer-events: none;
+    cursor: default;
+}
+
+[data-notify="progressbar"] {
+    margin-bottom: 0px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 2px;
+    background-color: inherit;
+}
+
+#searchInput {
+    outline: none;
+}
