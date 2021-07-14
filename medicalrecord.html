@@ -30,7 +30,7 @@
                         <a href="testingform.html">Phiếu xét nghiệm</a>
                     </li>
                     <li>
-                        <a href="">Phiếu nhập xuất viện</a>
+                        <a href="admissionform.html">Phiếu nhập xuất viện</a>
                     </li>
                     <li>
                         <a href="">Phiếu khám</a>
@@ -76,14 +76,13 @@
             <div class="row">
                 <div class="col-6 pl-5">
                     <div class="input-container">
-                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân">
+                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân hoặc số điện thoại">
                         <img src="assets/icons/search-ic.png" alt="">
                     </div>
                 </div>
 
                 <div class="col-2 pl-0">
-                    <button type="button" class="btn-search">Tìm kiếm <i
-                            class="fas fa-search ml-2"></i></button>
+                    <button type="button" class="btn-search">Tìm kiếm <i class="fas fa-search ml-2"></i></button>
                 </div>
                 <div class="col-4 pl-0 d-flex justify-content-between pr-5">
                     <button type="button" class="btn-new px-0" data-toggle="modal" data-target="#addModal">Mới<i
@@ -92,8 +91,7 @@
                             class="fas fa-retweet ml-2"></i></button>
                     <button type="button" class="btn-export px-0 ml-3">In<i
                             class="fas fa-file-export ml-2"></i></button>
-                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i
-                            class="fas fa-trash ml-2"></i></button>
+                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i class="fas fa-trash ml-2"></i></button>
                 </div>
 
             </div>
@@ -302,6 +300,8 @@
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-a11y="true"></script>
     <script src="js/medicalrecord.js"></script>
     <script src="plugin/bootstrap-notify-master/bootstrap-notify.js"></script>
+    <!-- <script src="plugin/jquery.table2excel.js"></script> -->
+    <script src="plugin/html2pdf.bundle.min.js"></script>
 </body>
 
 </html>

@@ -1,20 +1,15 @@
-const uri = "http://localhost:8080/medicalrecords";
+const uri = "http://localhost:8080/checkupforms";
 const accessToken = sessionStorage.getItem('accessToken');
 const searchInput = $("#searchInput")
 // edit input
 const idInputEdit = $('#idInputEdit');
-const fullNameInputEdit = $('#fullNameInputEdit');
-const dobInputEdit = $('#dobInputEdit');
-const addressInputEdit = $('#addressInputEdit');
-const phoneInputEdit = $('#phoneInputEdit');
-const sexInputEdit = $('#sexInputEdit');
-
+const recordIdInputEdit = $('#recordIdInputEdit');
+const symptomInputEdit = $('#symptomInputEdit');
+const doctorIdInputEdit = $('#doctorIdInputEdit');
 // add input
-const fullNameInputAdd = $('#fullNameInputAdd');
-const dobInputAdd = $('#dobInputAdd');
-const addressInputAdd = $('#addressInputAdd');
-const phoneInputAdd = $('#phoneInputAdd');
-const sexInputAdd = $('#sexInputAdd');
+const recordIdInputAdd = $('#recordIdInputAdd');
+const symptomInputAdd = $('#symptomInputAdd');
+const doctorIdInputAdd = $('#doctorIdInputAdd');
 
 //side bar
 $('#sidebarCollapse').on('click', function () {
@@ -43,9 +38,9 @@ $('#logout-btn').click(function () {
 //
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
-    if (fullNameInputAdd.val() == "" || dobInputAdd.val() == ""
-        || addressInputAdd.val() == "" || phoneInputAdd.val() == "" || sexInputAdd.val() == "") {
-        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin bệnh nhân")
+    if (recordIdInputAdd.val() == "" || symptomInputAdd.val() == ""
+        || doctorIdInputAdd.val() == "") {
+        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin phiếu khám")
     } else {
         $("#emptyAddForm").text("")
         $.ajax({
@@ -56,11 +51,9 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                fullName: fullNameInputAdd.val(),
-                dob: dobInputAdd.val(),
-                address: addressInputAdd.val(),
-                phoneNumber: phoneInputAdd.val(),
-                sex: sexInputAdd.val(),
+                recordId: recordIdInputAdd.val(),
+                symptom: symptomInputAdd.val(),
+                doctorId: doctorIdInputAdd.val(),
             })
             , success: function () {
                 console.log("Thêm thành công")
@@ -79,7 +72,7 @@ $("#btn-add-done").click(function (e) {
 
 $(".btn-update").click(function () {
     $("#tableBody tr").remove()
-    sendGetMedicalRecordRequest(uri);
+    sendGetCheckUpRequest(uri);
 })
 
 $(".btn-search").click(function () {
@@ -129,21 +122,8 @@ function search(params) {
         }
     })
 }
-function cvtTimestamp2Date(timestamp) {
-    let date = new Date(timestamp);
-    let year = date.getUTCFullYear();
-    let month = date.getUTCMonth() + 1;
-    let dt = date.getUTCDate();
-    if (dt < 10) {
-        dt = '0' + dt;
-    }
-    if (month < 10) {
-        month = '0' + month;
-    }
-    let result = year + "-" + month + "-" + dt;
-    return result;
-}
-function sendGetMedicalRecordRequest(urlToSend) {
+
+function sendGetCheckUpRequest(urlToSend) {
     $.ajax({
         type: "GET",
         url: urlToSend,
@@ -180,11 +160,9 @@ function sendEditRequest(urlToSend) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             id: idInputEdit.val(),
-            fullName: fullNameInputEdit.val(),
-            dob: dobInputEdit.val(),
-            sex: sexInputEdit.val(),
-            address: addressInputEdit.val(),
-            phoneNumber: phoneInputEdit.val()
+            recordId: recordIdInputEdit.val(),
+            symptom: symptomInputEdit.val(),
+            doctorId: doctorIdInputEdit.val(),
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
@@ -211,11 +189,9 @@ function getDataByID(urlToSend, id) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
             idInputEdit.val(result.id)
-            fullNameInputEdit.val(result.fullName)
-            dobInputEdit.val(result.dob)
-            sexInputEdit.val(result.sex)
-            addressInputEdit.val(result.address)
-            phoneInputEdit.val(result.phoneNumber)
+            recordIdInputEdit.val(result.recordResponse.id)
+            symptomInputEdit.val(result.symptom)
+            doctorIdInputEdit.val(result.doctorResponse.id)
             $('.btn-edit-done').click(function () {
                 console.log("Ấn done")
                 sendEditRequest(uri);
@@ -246,20 +222,15 @@ function setPaginationEvent(urlToSend, page) {
 }
 function renderTable(data) {
     (data.items).forEach(row => {
-        let sex = row.sex == 1 ? "Nam" : "Nữ";
-        let createAt = cvtTimestamp2Date(row.createAt)
-        let expirationDate = cvtTimestamp2Date(row.expirationDate)
         $("#tableBody").append(
             `<tr>
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
-                <td>${row.fullName}</td>
-                <td>${row.dob}</td>
-                <td>${sex}</td>
-                <td>${row.address}</td>
-                <td>${row.phoneNumber}</td>
-                <td>${createAt}</td>
-                <td>${expirationDate}</td>
+                <td>${row.recordResponse.id}</td>
+                <td>${row.recordResponse.fullName}</td>
+                <td>${row.symptom}</td>
+                <td>${row.doctorResponse.id}</td>
+                <td>${row.doctorResponse.fullName}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
                     <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-2" data-toggle="modal" data-target="#deleteModal" ></i><span>
@@ -357,7 +328,7 @@ function notifyPush(message, type) {
 }
 $(document).ready(function () {
     if (accessToken != null) {
-        sendGetMedicalRecordRequest(uri, accessToken);
+        sendGetCheckUpRequest(uri, accessToken);
     } else {
         $(location).attr('href', "page404.html")
     }

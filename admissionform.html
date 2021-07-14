@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="icon" href="assets/icons/fpt-ic.jpg" type="image/icon type">
-    <title>Hóa đơn viện phí</title>
+    <title>Phiếu Nhập/Xuất Viện</title>
 </head>
 
 <body>
@@ -29,19 +29,19 @@
                     <li>
                         <a href="testingform.html">Phiếu xét nghiệm</a>
                     </li>
-                    <li>
-                        <a href="admissionform.html">Phiếu nhập xuất viện</a>
+                    <li class="active">
+                        <a href="">Phiếu nhập xuất viện</a>
                     </li>
                     <li>
                         <a href="">Phiếu khám</a>
                     </li>
-                    <li >
+                    <li>
                         <a href="bill.html">Viện phí</a>
                     </li>
                     <li>
                         <a href="">Toa thuốc</a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="doctor.html">Bác sĩ</a>
                     </li>
                 </ul>
@@ -70,13 +70,13 @@
             </div>
 
             <div class="row mb-3" id="title">
-                <p id="hidden-text"><span>QUẢN LÝ BÁC SĨ</span></p>
+                <p id="hidden-text"><span>PHIẾU NHẬP XUẤT VIỆN</span></p>
             </div>
 
             <div class="row">
                 <div class="col-6 pl-5">
                     <div class="input-container">
-                        <input type="text" id="searchInput" placeholder="Nhập tên bác sĩ">
+                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân">
                         <img src="assets/icons/search-ic.png" alt="">
                     </div>
                 </div>
@@ -103,11 +103,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Mã BS</th>
+                            <th>Mã Phiếu</th>
+                            <th>Ngày Nhập Viện</th>
+                            <th>Ngày Xuất Viện</th>
+                            <th>Mã HS</th>
                             <th>Họ và Tên</th>
-                            <th>Số Điện Thoại</th>
-                            <th>Mã Khoa</th>
-                            <th>Tên Khoa</th>
                             <th>Khác</th>
                         </tr>
                     </thead>
@@ -135,7 +135,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Mã BS</div>
+                        <div class="col-5 label-input">Mã Phiếu</div>
                         <div class="col-7">
                             <div class="input-custom">
                                 <input type="text" id="idInputEdit" disabled>
@@ -143,26 +143,26 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Họ và Tên</div>
+                        <div class="col-5 label-input">Mã Hồ Sơ</div>
                         <div class="col-7">
                             <div class="input-custom">
-                                <input type="text" id="fullNameInputEdit">
+                                <input type="text" id="recordIdInputEdit">
                             </div>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Số Điện Thoại</div>
+                        <div class="col-5 label-input">Ngày Nhập Viện</div>
                         <div class="col-7">
                             <div class="input-custom">
-                                <input type="text" id="phoneNumberInputEdit">
+                                <input type="date" id="dateInInputEdit">
                             </div>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Mã Khoa</div>
+                        <div class="col-5 label-input">Ngày Xuất Viện</div>
                         <div class="col-7">
                             <div class="input-custom">
-                                <input type="text" id="departmentIdInputEdit">
+                                <input type="date" id="dateOutInputEdit">
                             </div>
                         </div>
                     </div>
@@ -206,7 +206,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI BÁC SĨ</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI PHIẾU NHẬP XUẤT VIỆN</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -215,26 +215,26 @@
                     <small class="err" id="emptyAddForm"></small>
                     <form class="add-medical-record-form">
                         <div class="row mb-3">
-                            <div class="col-5 label-input">Họ và Tên</div>
+                            <div class="col-5 label-input">Mã Hồ Sơ</div>
                             <div class="col-7">
                                 <div class="input-custom">
-                                    <input type="text" id="fullNameInputAdd" required value="">
+                                    <input type="text" id="recordIdInputAdd" required value="">
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-5 label-input">Số điện thoại</div>
+                            <div class="col-5 label-input">Ngày Nhập Viện</div>
                             <div class="col-7">
                                 <div class="input-custom">
-                                    <input type="text" id="phoneNumberInputAdd" required value="">
+                                    <input type="date" id="dateInInputAdd" required value="">
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-5 label-input">Mã Khoa</div>
+                            <div class="col-5 label-input">Ngày Xuất Viện</div>
                             <div class="col-7">
                                 <div class="input-custom">
-                                    <input type="text" id="departmentIdInputAdd" required value="">
+                                    <input type="date" id="dateOutInputAdd" required value="">
                                 </div>
                             </div>
                         </div>
@@ -258,7 +258,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-a11y="true"></script>
-    <script src="js/doctor.js"></script>
+    <script src="js/admissionform.js"></script>
     <script src="plugin/bootstrap-notify-master/bootstrap-notify.js"></script>
 </body>
 
