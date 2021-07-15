@@ -3,11 +3,13 @@ const accessToken = sessionStorage.getItem('accessToken');
 const searchInput = $("#searchInput")
 // add input
 const recordIdInputAdd = $('#recordIdInputAdd');
+const serviceInputAdd = $('#serviceInputAdd')
 const totalInputAdd = $('#totalInputAdd');
 
 // edit input
 const idInputEdit = $('#idInputEdit')
 const recordIdInputEdit = $('#recordIdInputEdit');
+const serviceInputEdit = $('#serviceInputEdit');
 const totalInputEdit = $('#totalInputEdit');
 
 //side bar
@@ -36,6 +38,7 @@ $('#logout-btn').click(function () {
 })
 //
 $("#btn-add-done").click(function (e) {
+    console.log(serviceInputAdd.val());
     e.preventDefault();
     if (recordIdInputAdd.val() == "" || totalInputAdd.val() == "") {
             $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin hóa đơn")
@@ -50,6 +53,7 @@ $("#btn-add-done").click(function (e) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
                 total: totalInputAdd.val(),
+                service: serviceInputAdd.val(),
                 recordId: recordIdInputAdd.val()
             })
             , success: function () {
@@ -77,11 +81,23 @@ $(".btn-search").click(function () {
         search(searchInput.val());
     }
 })
+$(".btn-export").click(function () {
+    var element = $("#table-medical-record")[0];
+    var opt = {
+        margin: [1, 0.1, 1, 0.1],
+        filename: 'bills.pdf',
+        pagebreak: { mode: 'avoid-all' },
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(element).save("my.pdf");
+})
 function search(params) {
     $("#tableBody tr").remove()
     $.ajax({
         type: "GET",
-        url: uri + `?name=${params}`,
+        url: uri + `?search=${params}`,
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         beforeSend: function (xhr) {
@@ -158,6 +174,7 @@ function sendEditRequest(urlToSend) {
         data: JSON.stringify({
             id: idInputEdit.val(),
             recordId: recordIdInputEdit.val(),
+            service: serviceInputEdit.val(),
             total: totalInputEdit.val(),
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
@@ -186,6 +203,7 @@ function getDataByID(urlToSend, id) {
         }, success: function (result) {
             idInputEdit.val(result.id)
             recordIdInputEdit.val(result.recordResponse.id)
+            serviceInputEdit.val(result.service)
             totalInputEdit.val(result.total)
             $('.btn-edit-done').click(function () {
                 sendEditRequest(uri);
@@ -221,8 +239,10 @@ function renderTable(data) {
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
                 <td>${createAt}</td>
+                <td>${row.service}</td>
                 <td>${row.recordResponse.id}</td>
                 <td>${row.recordResponse.fullName}</td>
+                <td>${row.recordResponse.phoneNumber}</td>
                 <td>${row.total}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>

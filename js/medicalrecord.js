@@ -98,7 +98,7 @@ $(".btn-export").click(function () {
         html2canvas: { scale: 1 },
         jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
     };
-    html2pdf().set(opt).from(element).save("my.pdf");
+    html2pdf().set(opt).from(element).save("medical-record.pdf");
 })
 function search(params) {
     $("#tableBody tr").remove()
@@ -261,8 +261,8 @@ function renderTable(data) {
                 <td>${createAt}</td>
                 <td>${expirationDate}</td>
                 <td>
-                    <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
-                    <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-2" data-toggle="modal" data-target="#deleteModal" ></i><span>
+                    <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
+                    <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>
                 </td>
             </tr>`
         )

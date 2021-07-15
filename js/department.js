@@ -1,17 +1,20 @@
-const uri = "http://localhost:8080/testingforms";
+const uri = "http://localhost:8080/departments";
 const accessToken = sessionStorage.getItem('accessToken');
 const searchInput = $("#searchInput")
-// add input
-const testNameInputAdd = $('#testNameInputAdd');
-const testDateInputAdd = $('#testDateInputAdd');
-const resultInputAdd = $('#resultInputAdd');
-const recordIdInputAdd = $('#recordIdInputAdd');
 // edit input
-const idInputEdit = $('#idInputEdit')
-const testNameInputEdit = $('#testNameInputEdit');
-const testDateInputEdit = $('#testDateInputEdit');
-const resultInputEdit = $('#resultInputEdit');
-const recordIdInputEdit = $('#recordIdInputEdit');
+const idInputEdit = $('#idInputEdit');
+const fullNameInputEdit = $('#fullNameInputEdit');
+const dobInputEdit = $('#dobInputEdit');
+const addressInputEdit = $('#addressInputEdit');
+const phoneInputEdit = $('#phoneInputEdit');
+const sexInputEdit = $('#sexInputEdit');
+
+// add input
+const fullNameInputAdd = $('#fullNameInputAdd');
+const dobInputAdd = $('#dobInputAdd');
+const addressInputAdd = $('#addressInputAdd');
+const phoneInputAdd = $('#phoneInputAdd');
+const sexInputAdd = $('#sexInputAdd');
 
 //side bar
 $('#sidebarCollapse').on('click', function () {
@@ -40,9 +43,9 @@ $('#logout-btn').click(function () {
 //
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
-    if (testNameInputAdd.val() == "" || testDateInputAdd.val() == ""
-        || resultInputAdd.val() == "" || recordIdInputAdd.val()=="") {
-        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin phiếu xét nghiệm")
+    if (fullNameInputAdd.val() == "" || dobInputAdd.val() == ""
+        || addressInputAdd.val() == "" || phoneInputAdd.val() == "" || sexInputAdd.val() == "") {
+        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin bệnh nhân")
     } else {
         $("#emptyAddForm").text("")
         $.ajax({
@@ -53,10 +56,11 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                testName: testNameInputAdd.val(),
-                testDate: testDateInputAdd.val(),
-                result: resultInputAdd.val(),
-                recordId: recordIdInputAdd.val()
+                fullName: fullNameInputAdd.val(),
+                dob: dobInputAdd.val(),
+                address: addressInputAdd.val(),
+                phoneNumber: phoneInputAdd.val(),
+                sex: sexInputAdd.val(),
             })
             , success: function () {
                 console.log("Thêm thành công")
@@ -75,13 +79,26 @@ $("#btn-add-done").click(function (e) {
 
 $(".btn-update").click(function () {
     $("#tableBody tr").remove()
-    sendGetBillRequest(uri);
+    sendGetMedicalRecordRequest(uri);
 })
 
 $(".btn-search").click(function () {
     if (searchInput.val() != "") {
         search(searchInput.val());
     }
+})
+
+$(".btn-export").click(function () {
+    var element = $("#table-medical-record")[0];
+    var opt = {
+        margin: [1, 0.1, 1, 0.1],
+        filename: 'medical-record.pdf',
+        pagebreak: { mode: 'avoid-all' },
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(element).save("medical-record.pdf");
 })
 function search(params) {
     $("#tableBody tr").remove()
@@ -126,7 +143,7 @@ function cvtTimestamp2Date(timestamp) {
     let result = year + "-" + month + "-" + dt;
     return result;
 }
-function sendGetBillRequest(urlToSend) {
+function sendGetMedicalRecordRequest(urlToSend) {
     $.ajax({
         type: "GET",
         url: urlToSend,
@@ -163,10 +180,11 @@ function sendEditRequest(urlToSend) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             id: idInputEdit.val(),
-            testName: testNameInputEdit.val(),
-            testDate: testDateInputEdit.val(),
-            result: resultInputEdit.val(),
-            recordId: recordIdInputEdit.val()
+            fullName: fullNameInputEdit.val(),
+            dob: dobInputEdit.val(),
+            sex: sexInputEdit.val(),
+            address: addressInputEdit.val(),
+            phoneNumber: phoneInputEdit.val()
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
@@ -193,11 +211,13 @@ function getDataByID(urlToSend, id) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
             idInputEdit.val(result.id)
-            testNameInputEdit.val(result.testName),
-            testDateInputEdit.val(result.testDate),
-            resultInputEdit.val(result.result),
-            recordIdInputEdit.val(result.recordResponse.id)
+            fullNameInputEdit.val(result.fullName)
+            dobInputEdit.val(result.dob)
+            sexInputEdit.val(result.sex)
+            addressInputEdit.val(result.address)
+            phoneInputEdit.val(result.phoneNumber)
             $('.btn-edit-done').click(function () {
+                console.log("Ấn done")
                 sendEditRequest(uri);
             })
         }, error: function (result) {
@@ -216,6 +236,7 @@ function setPaginationEvent(urlToSend, page) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
+            console.log("OK")
             $("#tableBody tr").remove()
             renderTable(result)
         }, error: function (result) {
@@ -225,16 +246,14 @@ function setPaginationEvent(urlToSend, page) {
 }
 function renderTable(data) {
     (data.items).forEach(row => {
+        let sex = row.sex == 1 ? "Nam" : "Nữ";
+        let createAt = cvtTimestamp2Date(row.createAt)
+        let expirationDate = cvtTimestamp2Date(row.expirationDate)
         $("#tableBody").append(
             `<tr>
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
-                <td>${row.testName}</td>
-                <td>${row.testDate}</td>
-                <td>${row.result == 1 ? "Dương tính" : "Âm tính"}</td>
-                <td>${row.recordResponse.id}</td>
-                <td>${row.recordResponse.fullName}</td>
-                <td>${row.recordResponse.phoneNumber}</td>
+                <td>${row.name}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
                     <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>
@@ -332,9 +351,8 @@ function notifyPush(message, type) {
 }
 $(document).ready(function () {
     if (accessToken != null) {
-        sendGetBillRequest(uri, accessToken);
+        sendGetMedicalRecordRequest(uri, accessToken);
     } else {
         $(location).attr('href', "page404.html")
     }
-
 })

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="icon" href="assets/icons/fpt-ic.jpg" type="image/icon type">
-    <title>Hóa đơn viện phí</title>
+    <title>Phiếu xét nghiệm</title>
 </head>
 
 <body>
@@ -33,7 +33,7 @@
                         <a href="admissionform.html">Phiếu nhập xuất viện</a>
                     </li>
                     <li>
-                        <a href="">Phiếu khám</a>
+                        <a href="checkupform.html">Phiếu khám</a>
                     </li>
                     <li>
                         <a href="bill.html">Viện phí</a>
@@ -43,6 +43,9 @@
                     </li>
                     <li>
                         <a href="doctor.html">Bác sĩ</a>
+                    </li>
+                    <li>
+                        <a href="department.html">Phòng/Khoa</a>
                     </li>
                 </ul>
             </div>
@@ -76,7 +79,7 @@
             <div class="row">
                 <div class="col-6 pl-5">
                     <div class="input-container">
-                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân">
+                        <input type="text" id="searchInput" placeholder="Nhập tên bệnh nhân hoặc số điện thoại">
                         <img src="assets/icons/search-ic.png" alt="">
                     </div>
                 </div>
@@ -109,6 +112,7 @@
                             <th>Kết Quả</th>
                             <th>Mã HS</th>
                             <th>Họ và Tên</th>
+                            <th>Số điện thoại</th>
                             <th>Khác</th>
                         </tr>
                     </thead>
@@ -217,7 +221,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI HÓA ĐƠN VIỆN PHÍ</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI PHIẾU XÉT NGHIỆM</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

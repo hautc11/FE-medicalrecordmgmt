@@ -228,12 +228,13 @@ function renderTable(data) {
                 <td>${row.id}</td>
                 <td>${row.recordResponse.id}</td>
                 <td>${row.recordResponse.fullName}</td>
+                <td>${row.recordResponse.phoneNumber}</td>
                 <td>${row.symptom}</td>
                 <td>${row.doctorResponse.id}</td>
                 <td>${row.doctorResponse.fullName}</td>
                 <td>
-                    <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
-                    <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-2" data-toggle="modal" data-target="#deleteModal" ></i><span>
+                    <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
+                    <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>
                 </td>
             </tr>`
         )

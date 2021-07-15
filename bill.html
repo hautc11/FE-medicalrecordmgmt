@@ -30,10 +30,10 @@
                         <a href="testingform.html">Phiếu xét nghiệm</a>
                     </li>
                     <li>
-                        <a href="">Phiếu nhập xuất viện</a>
+                        <a href="admissionform.html">Phiếu nhập xuất viện</a>
                     </li>
                     <li>
-                        <a href="">Phiếu khám</a>
+                        <a href="checkupform.html">Phiếu khám</a>
                     </li>
                     <li class="active">
                         <a href="">Viện phí</a>
@@ -43,6 +43,9 @@
                     </li>
                     <li>
                         <a href="doctor.html">Bác sĩ</a>
+                    </li>
+                    <li>
+                        <a href="department.html">Phòng/Khoa</a>
                     </li>
                 </ul>
             </div>
@@ -103,10 +106,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Mã Hóa Đơn</th>
+                            <th>Mã HĐ</th>
                             <th>Ngày Lập</th>
+                            <th>Dịch vụ</th>
                             <th>Mã HS</th>
                             <th>Họ và Tên</th>
+                            <th>SĐT</th>
                             <th>Tổng cộng</th>
                             <th>Khác</th>
                         </tr>
@@ -147,6 +152,19 @@
                         <div class="col-7">
                             <div class="input-custom">
                                 <input type="number" id="recordIdInputEdit">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 label-input">Dịch vụ</div>
+                        <div class="col-7">
+                            <div class="input-custom">
+                                <select id="serviceInputEdit">
+                                    <option value="Lưu trú">Lưu trú</option>
+                                    <option value="Thuốc">Thuốc</option>
+                                    <option value="Xét nghiệm">Xét nghiệm</option>
+                                    <option value="Khám bệnh">Khám bệnh</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -215,6 +233,19 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <div class="col-5 label-input">Dịch vụ</div>
+                            <div class="col-7">
+                                <div class="input-custom">
+                                    <select id="serviceInputAdd">
+                                        <option value="Lưu trú">Lưu trú</option>
+                                        <option value="Thuốc">Thuốc</option>
+                                        <option value="Xét nghiệm">Xét nghiệm</option>
+                                        <option value="Khám bệnh">Khám bệnh</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-5 label-input">Tổng cộng</div>
                             <div class="col-7">
                                 <div class="input-custom">
@@ -243,6 +274,7 @@
         crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-a11y="true"></script>
     <script src="js/bill.js"></script>
+    <script src="plugin/html2pdf.bundle.min.js"></script>
     <script src="plugin/bootstrap-notify-master/bootstrap-notify.js"></script>
 </body>
 
