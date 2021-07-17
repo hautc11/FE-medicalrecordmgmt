@@ -33,18 +33,16 @@
     font-size: 17px;
     display: block;
     text-decoration: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     color: black;
+}
+.sidebar-content li:first-child a{
+    margin-top: 20px;
 }
 
 #sidebar ul li.active {
     font-weight: 700;
 }
-
-#sidebar ul li a:first-child {
-    margin-top: 20px;
-}
-
 #sidebar ul li a::before {
     content: "";
     display: inline-block;

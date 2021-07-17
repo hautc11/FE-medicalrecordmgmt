@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" href="css/bill.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -35,17 +35,20 @@
                     <li>
                         <a href="checkupform.html">Phiếu khám</a>
                     </li>
-                    <li >
-                        <a href="bill.html">Viện phí</a>
-                    </li>
                     <li>
-                        <a href="">Toa thuốc</a>
+                        <a href="bill.html">Viện phí</a>
                     </li>
                     <li>
                         <a href="doctor.html">Bác sĩ</a>
                     </li>
                     <li class="active">
                         <a href="">Phòng/Khoa</a>
+                    </li>
+                    <li>
+                        <a href="prescription.html">Toa thuốc</a>
+                    </li>
+                    <li>
+                        <a href="medicine.html">Thuốc</a>
                     </li>
                 </ul>
             </div>
@@ -79,7 +82,7 @@
             <div class="row">
                 <div class="col-6 pl-5">
                     <div class="input-container">
-                        <input type="text" id="searchInput" placeholder="Nhập tên bác sĩ hoặc số điện thoại">
+                        <input type="text" id="searchInput" placeholder="Nhập tên Khoa">
                         <img src="assets/icons/search-ic.png" alt="">
                     </div>
                 </div>
@@ -106,7 +109,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Mã Phòng/Khoa</th>
+                            <th>Mã Khoa</th>
                             <th>Tên Khoa</th>
                             <th>Khác</th>
                         </tr>
@@ -135,7 +138,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Mã BS</div>
+                        <div class="col-5 label-input">Mã Khoa</div>
                         <div class="col-7">
                             <div class="input-custom">
                                 <input type="text" id="idInputEdit" disabled>
@@ -143,30 +146,13 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-5 label-input">Họ và Tên</div>
+                        <div class="col-5 label-input">Tên Khoa</div>
                         <div class="col-7">
                             <div class="input-custom">
-                                <input type="text" id="fullNameInputEdit">
+                                <input type="text" id="departmentNameInputEdit">
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5 label-input">Số Điện Thoại</div>
-                        <div class="col-7">
-                            <div class="input-custom">
-                                <input type="text" id="phoneNumberInputEdit">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5 label-input">Mã Khoa</div>
-                        <div class="col-7">
-                            <div class="input-custom">
-                                <input type="text" id="departmentIdInputEdit">
-                            </div>
-                        </div>
-                    </div>
-                    
+                    </div>                  
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-edit-done">Xong<i class="fas fa-check ml-2"></i></button>
@@ -206,7 +192,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI BÁC SĨ</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">THÊM MỚI PHÒNG KHOA</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -215,26 +201,10 @@
                     <small class="err" id="emptyAddForm"></small>
                     <form class="add-medical-record-form">
                         <div class="row mb-3">
-                            <div class="col-5 label-input">Họ và Tên</div>
+                            <div class="col-5 label-input">Tên Khoa</div>
                             <div class="col-7">
                                 <div class="input-custom">
-                                    <input type="text" id="fullNameInputAdd" required value="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-5 label-input">Số điện thoại</div>
-                            <div class="col-7">
-                                <div class="input-custom">
-                                    <input type="text" id="phoneNumberInputAdd" required value="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-5 label-input">Mã Khoa</div>
-                            <div class="col-7">
-                                <div class="input-custom">
-                                    <input type="text" id="departmentIdInputAdd" required value="">
+                                    <input type="text" id="departmentNameInputAdd" required value="">
                                 </div>
                             </div>
                         </div>

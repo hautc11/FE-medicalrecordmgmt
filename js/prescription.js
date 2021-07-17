@@ -1,12 +1,15 @@
-const uri = "http://localhost:8080/departments";
+const uri = "http://localhost:8080/prescriptions";
 const accessToken = sessionStorage.getItem('accessToken');
 const searchInput = $("#searchInput")
 // edit input
 const idInputEdit = $('#idInputEdit');
-const departmentNameInputEdit = $('#departmentNameInputEdit');
-
+const checkUpIdInputEdit = $('#checkUpIdInputEdit');
+const medicineIdInputEdit = $('#medicineIdInputEdit');
+const quantitiesInputEdit = $('#quantitiesInputEdit');
 // add input
-const departmentNameInputAdd = $('#fullNameInputAdd');
+const checkUpInputAdd = $('#checkUpInputAdd');
+const medicineIdInputAdd = $('#medicineIdInputAdd');
+const quantitiesInputAdd = $('#quantitiesInputAdd');
 
 //side bar
 $('#sidebarCollapse').on('click', function () {
@@ -35,8 +38,9 @@ $('#logout-btn').click(function () {
 //
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
-    if (departmentNameInputAdd.val() == null) {
-        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin")
+    if (checkUpInputAdd.val() == "" || medicineIdInputAdd.val() == ""
+        || quantitiesInputAdd.val() == "") {
+        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin đơn thuốc")
     } else {
         $("#emptyAddForm").text("")
         $.ajax({
@@ -47,14 +51,15 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                name: departmentNameInputAdd.val(),
+                checkupId: checkUpInputAdd.val(),
+                medicineId: medicineIdInputAdd.val(),
+                quantities: quantitiesInputAdd.val(),
             })
             , success: function () {
                 console.log("Thêm thành công")
             }, error: function (xhr) {
-                if (xhr.status == 400) {
-                    $('#addModal').modal('hide')
-                    notifyPush("Thêm thất bại!", "danger")
+                if (xhr.status == 500) {
+                    $("#emptyAddForm").text("Số lượng thuốc tồn kho không đủ đáp ứng")
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
@@ -167,19 +172,16 @@ function sendEditRequest(urlToSend) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             id: idInputEdit.val(),
-            fullName: fullNameInputEdit.val(),
-            dob: dobInputEdit.val(),
-            sex: sexInputEdit.val(),
-            address: addressInputEdit.val(),
-            phoneNumber: phoneInputEdit.val()
+            medicineId: medicineIdInputEdit.val(),
+            checkupId: checkUpIdInputEdit.val(),
+            quantities: quantitiesInputEdit.val(),
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
             console.log("success! " + result)
         }, error: function (xhr) {
-            if (xhr.status == 400) {
-                $('#editModal').modal('hide')
-                notifyPush("Sửa thông tin thất bại!", "danger")
+            if (xhr.status == 500) {
+                $("#emptyAddForm").text("Số lượng thuốc tồn kho không đủ đáp ứng")
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
@@ -197,8 +199,10 @@ function getDataByID(urlToSend, id) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
-            idInputEdit.val(result.id);
-            departmentNameInputEdit.val(result.name)
+            idInputEdit.val(result.id)
+            medicineIdInputEdit.val(result.medicine.id)
+            checkUpIdInputEdit.val(result.checkupForm.id)
+            quantitiesInputEdit.val(result.quantities)
             $('.btn-edit-done').click(function () {
                 console.log("Ấn done")
                 sendEditRequest(uri);
@@ -229,14 +233,17 @@ function setPaginationEvent(urlToSend, page) {
 }
 function renderTable(data) {
     (data.items).forEach(row => {
-        let sex = row.sex == 1 ? "Nam" : "Nữ";
-        let createAt = cvtTimestamp2Date(row.createAt)
-        let expirationDate = cvtTimestamp2Date(row.expirationDate)
         $("#tableBody").append(
             `<tr>
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
-                <td>${row.name}</td>
+                <td>${row.medicine.id}</td>
+                <td>${row.medicine.name}</td>
+                <td>${row.quantities}</td>
+                <td>${row.checkupForm.id}</td>
+                <td>${row.checkupForm.recordResponse.fullName}</td>
+                <td>${row.checkupForm.recordResponse.phoneNumber}</td>
+                <td>${row.checkupForm.symptom}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
                     <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>

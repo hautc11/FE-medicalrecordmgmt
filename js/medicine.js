@@ -1,13 +1,16 @@
-const uri = "http://localhost:8080/departments";
+const uri = "http://localhost:8080/medicines";
 const accessToken = sessionStorage.getItem('accessToken');
 const searchInput = $("#searchInput")
 // edit input
 const idInputEdit = $('#idInputEdit');
-const departmentNameInputEdit = $('#departmentNameInputEdit');
+const nameInputEdit = $('#nameInputEdit');
+const quantitiesInputEdit = $('#quantitiesInputEdit');
+const dateInputEdit = $('#dateInputEdit');
 
 // add input
-const departmentNameInputAdd = $('#fullNameInputAdd');
-
+const nameInputAdd = $('#nameInputAdd');
+const quantitiesInputAdd = $('#quantitiesInputAdd');
+const dateInputAdd = $('#dateInputAdd');
 //side bar
 $('#sidebarCollapse').on('click', function () {
     $('#sidebar').toggleClass('active', 2000, "easeOutSine");
@@ -35,7 +38,7 @@ $('#logout-btn').click(function () {
 //
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
-    if (departmentNameInputAdd.val() == null) {
+    if (nameInputAdd.val() == "" || quantitiesInputAdd.val() == "" || dateInputAdd.val() == "") {
         $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin")
     } else {
         $("#emptyAddForm").text("")
@@ -47,7 +50,9 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                name: departmentNameInputAdd.val(),
+                name: nameInputAdd.val(),
+                quantities: quantitiesInputAdd.val(),
+                expirationDate: dateInputAdd.val()
             })
             , success: function () {
                 console.log("Thêm thành công")
@@ -66,7 +71,7 @@ $("#btn-add-done").click(function (e) {
 
 $(".btn-update").click(function () {
     $("#tableBody tr").remove()
-    sendGetMedicalRecordRequest(uri);
+    sendGetMedicineRequest(uri);
 })
 
 $(".btn-search").click(function () {
@@ -130,7 +135,7 @@ function cvtTimestamp2Date(timestamp) {
     let result = year + "-" + month + "-" + dt;
     return result;
 }
-function sendGetMedicalRecordRequest(urlToSend) {
+function sendGetMedicineRequest(urlToSend) {
     $.ajax({
         type: "GET",
         url: urlToSend,
@@ -167,11 +172,9 @@ function sendEditRequest(urlToSend) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             id: idInputEdit.val(),
-            fullName: fullNameInputEdit.val(),
-            dob: dobInputEdit.val(),
-            sex: sexInputEdit.val(),
-            address: addressInputEdit.val(),
-            phoneNumber: phoneInputEdit.val()
+            name: nameInputEdit.val(),
+            quantities: quantitiesInputEdit.val(),
+            expirationDate: dateInputEdit.val(),
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
@@ -197,10 +200,11 @@ function getDataByID(urlToSend, id) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
-            idInputEdit.val(result.id);
-            departmentNameInputEdit.val(result.name)
+            idInputEdit.val(result.id)
+            nameInputEdit.val(result.name)
+            quantitiesInputEdit.val(result.quantities)
+            dateInputEdit.val(result.expirationDate)
             $('.btn-edit-done').click(function () {
-                console.log("Ấn done")
                 sendEditRequest(uri);
             })
         }, error: function (result) {
@@ -229,14 +233,13 @@ function setPaginationEvent(urlToSend, page) {
 }
 function renderTable(data) {
     (data.items).forEach(row => {
-        let sex = row.sex == 1 ? "Nam" : "Nữ";
-        let createAt = cvtTimestamp2Date(row.createAt)
-        let expirationDate = cvtTimestamp2Date(row.expirationDate)
         $("#tableBody").append(
             `<tr>
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
                 <td>${row.name}</td>
+                <td>${row.quantities}</td>
+                <td>${row.expirationDate}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
                     <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>
@@ -250,7 +253,7 @@ function renderTable(data) {
     })
     $(".delete-row").click(function () {
         var id = $(this).attr('data');
-        $('.modal-body-delete').text(`Bạn muốn xóa hồ sơ có Mã Số HS: ${id}?`)
+        $('.modal-body-delete').text(`Bạn muốn xóa Thuốc có mã số: ${id}?`)
         deleteById(uri, id);
     })
     var $submit = $(".btn-delete-all").hide(),
@@ -334,7 +337,7 @@ function notifyPush(message, type) {
 }
 $(document).ready(function () {
     if (accessToken != null) {
-        sendGetMedicalRecordRequest(uri, accessToken);
+        sendGetMedicineRequest(uri, accessToken);
     } else {
         $(location).attr('href', "page404.html")
     }
