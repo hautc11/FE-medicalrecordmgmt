@@ -82,16 +82,102 @@ $(".btn-search").click(function () {
 })
 
 $(".btn-export").click(function () {
-    var element = $("#table-medical-record")[0];
-    var opt = {
-        margin: [1, 0.1, 1, 0.1],
-        filename: 'medical-record.pdf',
-        pagebreak: { mode: 'avoid-all' },
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 1 },
-        jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
-    };
-    html2pdf().set(opt).from(element).save("my.pdf");
+    var d = new Date();
+    var month = d.getMonth() + 1
+    var now = d.getDate() + "/" + month + "/" + d.getFullYear();
+    console.log(now);
+    html2canvas(document.querySelector("#table-medical-record"), {
+        x: 300,
+    }).then(canvas => {
+        pdfMake.fonts = {
+            Roboto: {
+                normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+                bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+                italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+                bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
+            }
+        }
+        var image = canvas.toDataURL();
+        var dd = {
+            pageOrientation: 'landscape',
+            pageMargins: [40, 30],
+            content: [
+                {
+                    table: {
+                        widths: ['*', '*'],
+                        body: [
+                            [
+                                [
+                                    {
+                                        text: 'Bệnh viện trung ương X',
+                                        alignment: 'center',
+                                    },
+                                    {
+                                        text: 'Thành phố Y\n',
+                                        style: 'subtext',
+                                        alignment: 'center',
+                                        italics: true
+                                    },
+                                ],
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                },
+                {
+                    text: 'Người lập bảng: ',
+                    margin: [30, 20, 0, 0],
+                    style: 'subtext'
+                },
+                {
+                    text: 'Ngày lập: ' + now,
+                    margin: [30, 0],
+                    style: 'subtext'
+                },
+                {
+                    text: 'LỊCH SỬ KHÁM BỆNH',
+                    style: 'header',
+                    margin: [0, 20],
+                    alignment: 'center'
+                },
+                {
+                    image: image,
+                    width: 750
+                },
+                {
+                    table: {
+                        widths: ['*', '*'],
+                        body: [
+                            [[],
+                            [
+                                {
+                                    text: 'Chữ ký',
+                                    alignment: 'center',
+                                    margin: [80, 10, 0, 0]
+                                },
+
+                            ],
+                            ]
+                        ]
+
+                    },
+                    layout: 'noBorders'
+                },
+            ],
+            styles: {
+                header: {
+                    fontSize: 15,
+                    bold: true
+                },
+                subtext: {
+                    fontSize: 10,
+                    italic: true
+                }
+            },
+        }
+        pdfMake.createPdf(dd).open();
+    });
 })
 function search(params) {
     $("#tableBody tr").remove()

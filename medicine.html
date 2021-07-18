@@ -88,8 +88,7 @@
                 </div>
 
                 <div class="col-2 pl-0">
-                    <button type="button" class="btn-search">Tìm kiếm <i
-                            class="fas fa-search ml-2"></i></button>
+                    <button type="button" class="btn-search">Tìm kiếm <i class="fas fa-search ml-2"></i></button>
                 </div>
                 <div class="col-4 pl-0 d-flex justify-content-between pr-5">
                     <button type="button" class="btn-new px-0" data-toggle="modal" data-target="#addModal">Mới<i
@@ -98,8 +97,7 @@
                             class="fas fa-retweet ml-2"></i></button>
                     <button type="button" class="btn-export px-0 ml-3">In<i
                             class="fas fa-file-export ml-2"></i></button>
-                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i
-                            class="fas fa-trash ml-2"></i></button>
+                    <button type="button" class="btn-delete-all px-0 ml-3">Xóa<i class="fas fa-trash ml-2"></i></button>
                 </div>
 
             </div>
@@ -154,7 +152,7 @@
                                 <input type="text" id="nameInputEdit">
                             </div>
                         </div>
-                    </div>                  
+                    </div>
                     <div class="row mb-3">
                         <div class="col-5 label-input">Số lượng</div>
                         <div class="col-7">
@@ -162,7 +160,7 @@
                                 <input type="number" id="quantitiesInputEdit">
                             </div>
                         </div>
-                    </div>                  
+                    </div>
                     <div class="row mb-3">
                         <div class="col-5 label-input">Ngày hết hạn</div>
                         <div class="col-7">
@@ -170,7 +168,7 @@
                                 <input type="date" id="dateInputEdit">
                             </div>
                         </div>
-                    </div>                  
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-edit-done">Xong<i class="fas fa-check ml-2"></i></button>
@@ -225,7 +223,7 @@
                                     <input type="text" id="nameInputAdd">
                                 </div>
                             </div>
-                        </div>                  
+                        </div>
                         <div class="row mb-3">
                             <div class="col-5 label-input">Số lượng</div>
                             <div class="col-7">
@@ -233,7 +231,7 @@
                                     <input type="number" id="quantitiesInputAdd">
                                 </div>
                             </div>
-                        </div>                  
+                        </div>
                         <div class="row mb-3">
                             <div class="col-5 label-input">Ngày hết hạn</div>
                             <div class="col-7">
@@ -241,7 +239,7 @@
                                     <input type="date" id="dateInputAdd">
                                 </div>
                             </div>
-                        </div>                  
+                        </div>
                         <div class="row mb-3 pull-right">
                             <button id="btn-add-done" type="submit" class="btn-done mr-3">Đồng ý<i
                                     class="fas fa-check ml-2"></i></button>
@@ -264,7 +262,10 @@
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-a11y="true"></script>
     <script src="js/medicine.js"></script>
     <script src="plugin/bootstrap-notify-master/bootstrap-notify.js"></script>
-    <script src="plugin/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.0/pdfmake.min.js"
+        integrity="sha512-3KEActb4EdIUU0uR38GT+fwQoGE6NgQtklBmK5FR0hg/KsrpnD27V5o8I6/E5lpcdO0BCulWuQuhyuhR4IlD3w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="plugin/html2canvas.min.js"></script>
 </body>
 
 </html>
