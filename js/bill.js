@@ -343,7 +343,7 @@ function renderTable(data) {
     })
     $(".delete-row").click(function () {
         var id = $(this).attr('data');
-        $('.modal-body-delete').text(`Bạn muốn xóa hồ sơ có Mã Số HS: ${id}?`)
+        $('.modal-body-delete').text(`Bạn muốn Viện phí: ${id}?`)
         deleteById(uri, id);
     })
     var $submit = $(".btn-delete-all").hide(),
