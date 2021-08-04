@@ -65,6 +65,9 @@ $("#btn-add-done").click(function (e) {
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
@@ -260,6 +263,9 @@ function sendEditRequest(urlToSend) {
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+               }, 1000);
             }
         }
     })
@@ -366,6 +372,9 @@ function deleteByListId(list) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
@@ -384,11 +393,14 @@ function deleteById(urlToSend, id) {
                 console.log("Xóa thành công")
             }, error: function (xhr) {
                 if (xhr.status == 400) {
-                    $('#deleteModal').modal('hide')
-                    notifyPush("Xóa thất bại!", "danger")
+                    var err = JSON.parse(xhr.responseText).message
+                    $("#emptyAddForm").text(err)
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })

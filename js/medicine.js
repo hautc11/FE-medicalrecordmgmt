@@ -207,20 +207,7 @@ function search(params) {
         }
     })
 }
-function cvtTimestamp2Date(timestamp) {
-    let date = new Date(timestamp);
-    let year = date.getUTCFullYear();
-    let month = date.getUTCMonth() + 1;
-    let dt = date.getUTCDate();
-    if (dt < 10) {
-        dt = '0' + dt;
-    }
-    if (month < 10) {
-        month = '0' + month;
-    }
-    let result = year + "-" + month + "-" + dt;
-    return result;
-}
+
 function sendGetMedicineRequest(urlToSend) {
     $.ajax({
         type: "GET",
@@ -272,6 +259,9 @@ function sendEditRequest(urlToSend) {
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+               }, 1000);
             }
         }
     })
@@ -376,6 +366,9 @@ function deleteByListId(list) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
@@ -399,6 +392,9 @@ function deleteById(urlToSend, id) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })

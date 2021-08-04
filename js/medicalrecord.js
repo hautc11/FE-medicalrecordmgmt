@@ -4,6 +4,7 @@ const searchInput = $("#searchInput")
 // edit input
 const idInputEdit = $('#idInputEdit');
 const fullNameInputEdit = $('#fullNameInputEdit');
+const insuaranceInputEdit = $('#insuaranceInputEdit');
 const dobInputEdit = $('#dobInputEdit');
 const addressInputEdit = $('#addressInputEdit');
 const phoneInputEdit = $('#phoneInputEdit');
@@ -11,6 +12,7 @@ const sexInputEdit = $('#sexInputEdit');
 
 // add input
 const fullNameInputAdd = $('#fullNameInputAdd');
+const insuaranceInputAdd = $('#insuaranceInputAdd');
 const dobInputAdd = $('#dobInputAdd');
 const addressInputAdd = $('#addressInputAdd');
 const phoneInputAdd = $('#phoneInputAdd');
@@ -57,13 +59,14 @@ $("#btn-add-done").click(function (e) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
                 fullName: fullNameInputAdd.val(),
+                insuaranceCode: insuaranceInputAdd.val(),
                 dob: dobInputAdd.val(),
                 address: addressInputAdd.val(),
                 phoneNumber: phoneInputAdd.val(),
                 sex: sexInputAdd.val(),
             })
-            , success: function () {
-                console.log("Thêm thành công")
+            , success: function (result) {
+                console.log(result)
             }, error: function (xhr) {
                 if (xhr.status == 400) {
                     $('#addModal').modal('hide')
@@ -71,6 +74,9 @@ $("#btn-add-done").click(function (e) {
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
@@ -281,6 +287,9 @@ function sendEditRequest(urlToSend) {
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+               }, 1000);
             }
         }
     })
@@ -297,6 +306,7 @@ function getDataByID(urlToSend, id) {
         }, success: function (result) {
             idInputEdit.val(result.id)
             fullNameInputEdit.val(result.fullName)
+            insuaranceInputEdit.val(result.insuaranceCode)
             dobInputEdit.val(result.dob)
             sexInputEdit.val(result.sex)
             addressInputEdit.val(result.address)
@@ -333,18 +343,17 @@ function renderTable(data) {
     (data.items).forEach(row => {
         let sex = row.sex == 1 ? "Nam" : "Nữ";
         let createAt = cvtTimestamp2Date(row.createAt)
-        let expirationDate = cvtTimestamp2Date(row.expirationDate)
         $("#tableBody").append(
             `<tr>
                 <td><input type="checkbox" name="selectBox" class="checkBox" value=${row.id}></td>
                 <td>${row.id}</td>
                 <td>${row.fullName}</td>
+                <td>${row.insuaranceCode}</td>
                 <td>${row.dob}</td>
                 <td>${sex}</td>
                 <td>${row.address}</td>
                 <td>${row.phoneNumber}</td>
                 <td>${createAt}</td>
-                <td>${expirationDate}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit ml-1" data-toggle="modal" data-target="#editModal"></i></span>
                     <span class='delete-row' data='${row.id}' > <i class="fas fa-trash ml-1" data-toggle="modal" data-target="#deleteModal" ></i><span>
@@ -418,6 +427,9 @@ function deleteById(urlToSend, id) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })

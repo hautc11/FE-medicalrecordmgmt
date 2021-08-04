@@ -45,7 +45,7 @@
                         <a href="department.html">Phòng/Khoa</a>
                     </li>
                     <li>
-                        <a href="">Toa thuốc</a>
+                        <a href="prescription.html">Toa thuốc</a>
                     </li>
                     <li>
                         <a href="medicine.html">Thuốc</a>
@@ -109,12 +109,12 @@
                             <th>#</th>
                             <th>Mã HS</th>
                             <th>Họ và Tên</th>
+                            <th>Mã Bảo Hiểm</th>
                             <th>Ngày Sinh</th>
                             <th>Giới tính</th>
                             <th>Địa Chỉ</th>
                             <th>Số Điện Thoại</th>
                             <th>Ngày Lập</th>
-                            <th>Ngày Hết Hạn</th>
                             <th>Khác</th>
                         </tr>
                     </thead>
@@ -154,6 +154,14 @@
                         <div class="col-7">
                             <div class="input-custom">
                                 <input type="text" id="fullNameInputEdit">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 label-input">Mã Bảo Hiểm</div>
+                        <div class="col-7">
+                            <div class="input-custom">
+                                <input type="text" id="insuaranceInputEdit" required value="">
                             </div>
                         </div>
                     </div>
@@ -248,6 +256,14 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <div class="col-5 label-input">Mã Bảo Hiểm</div>
+                            <div class="col-7">
+                                <div class="input-custom">
+                                    <input type="text" id="insuaranceInputAdd" required value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-5 label-input">Ngày Sinh</div>
                             <div class="col-7">
                                 <div class="input-custom">
@@ -267,7 +283,7 @@
                             <div class="col-5 label-input">Số Điện Thoại</div>
                             <div class="col-7">
                                 <div class="input-custom">
-                                    <input type="text" id="phoneInputAdd" required value="">
+                                    <input type="number" id="phoneInputAdd" required value="">
                                 </div>
                             </div>
                         </div>

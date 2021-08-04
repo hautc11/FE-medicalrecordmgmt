@@ -41,7 +41,7 @@ $('#logout-btn').click(function () {
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
     if (testNameInputAdd.val() == "" || testDateInputAdd.val() == ""
-        || resultInputAdd.val() == "" || recordIdInputAdd.val()=="") {
+        || resultInputAdd.val() == "" || recordIdInputAdd.val() == "") {
         $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin phiếu xét nghiệm")
     } else {
         $("#emptyAddForm").text("")
@@ -60,10 +60,13 @@ $("#btn-add-done").click(function (e) {
             })
             , success: function () {
                 console.log("Thêm thành công")
+                setTimeout(function () {// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000);
             }, error: function (xhr) {
                 if (xhr.status == 400) {
-                    $('#addModal').modal('hide')
-                    notifyPush("Thêm thất bại!", "danger")
+                    var err = JSON.parse(xhr.responseText).message
+                    $("#emptyAddForm").text(err)
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
@@ -271,11 +274,14 @@ function sendEditRequest(urlToSend) {
             console.log("success! " + result)
         }, error: function (xhr) {
             if (xhr.status == 400) {
-                $('#editModal').modal('hide')
-                notifyPush("Sửa thông tin thất bại!", "danger")
+                var err = JSON.parse(xhr.responseText).message
+                $("#emptyEditForm").text(err)
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function () {// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000);
             }
         }
     })
@@ -292,9 +298,9 @@ function getDataByID(urlToSend, id) {
         }, success: function (result) {
             idInputEdit.val(result.id)
             testNameInputEdit.val(result.testName),
-            testDateInputEdit.val(result.testDate),
-            resultInputEdit.val(result.result),
-            recordIdInputEdit.val(result.recordResponse.id)
+                testDateInputEdit.val(result.testDate),
+                resultInputEdit.val(result.result),
+                recordIdInputEdit.val(result.recordResponse.id)
             $('.btn-edit-done').click(function () {
                 sendEditRequest(uri);
             })
@@ -406,6 +412,9 @@ function deleteById(urlToSend, id) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function () {// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 1000);
                 }
             }
         })

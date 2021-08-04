@@ -41,7 +41,7 @@ $("#btn-add-done").click(function (e) {
     console.log(serviceInputAdd.val());
     e.preventDefault();
     if (recordIdInputAdd.val() == "" || totalInputAdd.val() == "") {
-            $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin hóa đơn")
+        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin hóa đơn")
     } else {
         $("#emptyAddForm").text("")
         $.ajax({
@@ -52,7 +52,7 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                total: totalInputAdd.val(),
+                price: totalInputAdd.val(),
                 service: serviceInputAdd.val(),
                 recordId: recordIdInputAdd.val()
             })
@@ -60,11 +60,14 @@ $("#btn-add-done").click(function (e) {
                 console.log("Thêm thành công")
             }, error: function (xhr) {
                 if (xhr.status == 400) {
-                    $('#addModal').modal('hide')
-                    notifyPush("Thêm thất bại!", "danger")
+                    var err = JSON.parse(xhr.responseText).message
+                    $("#emptyAddForm").text(err)
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
+                    setTimeout(function () {// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 1000);
                 }
             }
         })
@@ -252,6 +255,9 @@ function sendGetBillRequest(urlToSend) {
 }
 
 function sendEditRequest(urlToSend) {
+    if (recordIdInputAdd.val() == "" || totalInputAdd.val() == "") {
+        $("#emptyEditForm").text("Không được bỏ trống tổng cộng & Mã Hồ Sơ")
+    }
     $.ajax({
         type: "PUT",
         url: urlToSend,
@@ -261,18 +267,21 @@ function sendEditRequest(urlToSend) {
             id: idInputEdit.val(),
             recordId: recordIdInputEdit.val(),
             service: serviceInputEdit.val(),
-            total: totalInputEdit.val(),
+            price: totalInputEdit.val(),
         }), beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
         }, success: function (result) {
             console.log("success! " + result)
         }, error: function (xhr) {
             if (xhr.status == 400) {
-                $('#editModal').modal('hide')
-                notifyPush("Sửa thông tin thất bại!", "danger")
+                var err = JSON.parse(xhr.responseText).message
+                $("#emptyEditForm").text(err)
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function () {// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000);
             }
         }
     })
@@ -290,7 +299,7 @@ function getDataByID(urlToSend, id) {
             idInputEdit.val(result.id)
             recordIdInputEdit.val(result.recordResponse.id)
             serviceInputEdit.val(result.service)
-            totalInputEdit.val(result.total)
+            totalInputEdit.val(result.price)
             $('.btn-edit-done').click(function () {
                 sendEditRequest(uri);
             })
@@ -329,6 +338,8 @@ function renderTable(data) {
                 <td>${row.recordResponse.id}</td>
                 <td>${row.recordResponse.fullName}</td>
                 <td>${row.recordResponse.phoneNumber}</td>
+                <td>${row.price}</td>
+                <td>${row.discount}</td>
                 <td>${row.total}</td>
                 <td>
                     <span class='edit-row' data=${row.id}><i class="fas fa-edit" data-toggle="modal" data-target="#editModal"></i></span>
@@ -380,6 +391,9 @@ function deleteByListId(list) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function () {// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 1000);
                 }
             }
         })
@@ -403,6 +417,9 @@ function deleteById(urlToSend, id) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function () {// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 1000);
                 }
             }
         })
@@ -426,10 +443,10 @@ function notifyPush(message, type) {
     });
 }
 $(document).ready(function () {
-    if (accessToken!=null) {
+    if (accessToken != null) {
         sendGetBillRequest(uri, accessToken);
     } else {
         $(location).attr('href', "page404.html")
     }
-   
+
 })

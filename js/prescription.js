@@ -35,12 +35,13 @@ $('#logout-btn').click(function () {
     sessionStorage.clear()
     $(location).attr('href', "index.html")
 })
-//
+
 $("#btn-add-done").click(function (e) {
     e.preventDefault();
     if (checkUpInputAdd.val() == "" || medicineIdInputAdd.val() == ""
-        || quantitiesInputAdd.val() == "") {
-        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin đơn thuốc")
+    || quantitiesInputAdd.val() == "") {
+        console.log("null"),
+        $("#emptyAddForm").text("Vui lòng điền đầy đủ thông tin!")
     } else {
         $("#emptyAddForm").text("")
         $.ajax({
@@ -51,18 +52,24 @@ $("#btn-add-done").click(function (e) {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
             }, data: JSON.stringify({
-                checkupId: checkUpInputAdd.val(),
                 medicineId: medicineIdInputAdd.val(),
                 quantities: quantitiesInputAdd.val(),
+                checkupId: checkUpInputAdd.val(),
             })
             , success: function () {
                 console.log("Thêm thành công")
             }, error: function (xhr) {
                 if (xhr.status == 500) {
-                    $("#emptyAddForm").text("Số lượng thuốc tồn kho không đủ đáp ứng")
+                    $("#emptyAddForm").text("Số lượng thuốc trong kho không đáp ứng đủ")
                 } else if (xhr.status == 200) {
                     $('#addModal').modal('hide')
                     notifyPush("Thêm thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
+                }else if (xhr.status==400){
+                    var err = JSON.parse(xhr.responseText).message
+                    $("#emptyAddForm").text(err)
                 }
             }
         })
@@ -271,6 +278,9 @@ function sendEditRequest(urlToSend) {
             } else if (xhr.status == 200) {
                 $('#editModal').modal('hide')
                 notifyPush("Chỉnh sửa thành công!", "success")
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+               }, 1000);
             }
         }
     })
@@ -380,6 +390,9 @@ function deleteByListId(list) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
@@ -403,6 +416,9 @@ function deleteById(urlToSend, id) {
                 } else if (xhr.status == 200) {
                     $('#deleteModal').modal('hide')
                     notifyPush("Xóa thành công!", "success")
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                   }, 1000);
                 }
             }
         })
